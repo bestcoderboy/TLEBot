@@ -1,0 +1,6 @@
+# TLEWikiBot
+## Getting started
+To host the TLEWikiBot locally, run `pip install -r requirements.txt` to install necessary packages.
+Then create a `.env` file and put your discord token inside like this:
+`DISCORD_TOKEN=<YOUR-TOKEN-HERE>`
+Finally, run `python main.py` to run the script and start the bot.
