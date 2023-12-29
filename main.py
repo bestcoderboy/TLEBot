@@ -15,7 +15,7 @@ load_dotenv()
 # Setting up Discord bot with command prefix and intents
 intents = discord.Intents.default()
 intents.message_content = True
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = commands.Bot(command_prefix='>', intents=intents)
 
 # Removing default help command to replace it with a custom one
 bot.remove_command('help')
