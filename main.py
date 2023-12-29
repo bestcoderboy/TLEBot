@@ -7,6 +7,7 @@ from discord.ext import commands
 import urllib.parse
 from wiki_to_dict import convert_wikitext_to_dict
 import os
+import random as rand_lib
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,7 +15,7 @@ load_dotenv()
 # Setting up Discord bot with command prefix and intents
 intents = discord.Intents.default()
 intents.message_content = True
-bot = commands.Bot(command_prefix='>', intents=intents)
+bot = commands.Bot(command_prefix='!', intents=intents)
 
 # Removing default help command to replace it with a custom one
 bot.remove_command('help')
@@ -176,12 +177,6 @@ async def create(ctx, *, arg=None):
         await ctx.send("<https://wiki.theluxuryelevator.com/w/index.php?title=" + wiki_link_parsed + "&veaction=edit>")
 
 
-# Command to provide a link to the Luxury Elevator Wiki
-@bot.command()
-async def wiki(ctx, *, arg=None):
-    await ctx.send("<https://wiki.theluxuryelevator.com>")
-
-
 # Command to search the Luxury Elevator Wiki and display results
 @bot.command()
 async def search(ctx, *, arg=None):
@@ -226,15 +221,54 @@ async def signup(ctx, *, arg=None):
     await ctx.send("<https://wiki.theluxuryelevator.com/wiki/Special:CreateAccount>")
 
 
-# Command to provide a link to recent changes on the Luxury Elevator Wiki
+# Command to provide links to the Luxury Elevator Wiki
 @bot.command()
-async def recent(ctx, *, arg=None):
-    await ctx.send("<https://wiki.theluxuryelevator.com/wiki/Special:RecentChanges>")
+async def wiki(ctx, *, arg=None):
+    if arg is None:
+        await ctx.send("<https://wiki.theluxuryelevator.com>")
+    elif arg == "recent":
+        await ctx.send("<https://wiki.theluxuryelevator.com/wiki/Special:RecentChanges>")
+    elif arg == "signup":
+        await ctx.send("<https://wiki.theluxuryelevator.com/wiki/Special:RecentChanges>")
+    else:
+        await ctx.send(embed=error_embed("That isn't a "))
+
+
+# Command to give random facts - why not?
+@bot.command(aliases=['fact', 'randomfact', 'funfact', 'facts'])
+async def random(ctx, *, arg=None):
+    fun_facts = [
+        "If you submit <#561140450962964482> there's a chance it'll get added to the game!",
+        """The Luxury Elevator was once featured on **ItsFunneh's** channel. 
+[The video](https://www.youtube.com/watch?v=AycjO0rwR4E) of her playing the game got 16 million views!""",
+        "The lobby was only added almost two years after the game was first uploaded to Roblox! You would spawn in the elevator instead.",
+        "Several old floors had to be deleted after Roblox introduced their audio update in 2022... wait that's not a fun fact :(",
+        "This bot was created in only two hours, and all the code running it is [available](https://github.com/bestcoderboy/TLEbot) for anyone to use on their own server!",
+        "In 2024, The Luxury Elevator will receive a super update, with new floors, a UI overhaul, bug fixes and more.",
+        "### ################ ## # ###### #### ####### ####### ######### - ##### # #### ## #######. ### #####...",
+        "The game has 48 badges - four of them are future badges and three badges can no longer be obtained.",
+        "There are currently six Trusted Admins, one Admin, and eight VIPs!",
+        "More fun facts are coming soon, promise!"
+    ]
+    embed = discord.Embed(title="Fun fact", color=0xde8114, description=f"""{fun_facts[rand_lib.randrange(0, (len(fun_facts) - 1))]}""")
+    embed.set_footer(text="Created by BestSpyBoy • v1.0.3",
+                     icon_url="https://cdn.discordapp.com/avatars/725417693699899534/6d3934a6a8467f0420b530905f7b4361.webp")
+    await ctx.send(embed=embed)
+
+@bot.command(aliases=['credit'])
+async def credits(ctx, *, arg=None):
+    embed = discord.Embed(title="TLE Credits", color=0xde8114, description=f"""Game Creator: **Milo Murphy**
+Lead Developer / Game Owner: **Ferb_Fletcher**
+(retired) Developer: **Phineas_Flynn**
+    """)
+    embed.set_footer(text="Created by BestSpyBoy • v1.0.3",
+                     icon_url="https://cdn.discordapp.com/avatars/725417693699899534/6d3934a6a8467f0420b530905f7b4361.webp")
+    await ctx.send(embed=embed)
 
 
 # Command to provide a link to recent changes on the Luxury Elevator Wiki
 @bot.command()
-async def link(ctx, *, arg=None):
+async def wikilink(ctx, *, arg=None):
     wiki_link = re.sub(' \(.*?\)', "", arg)
     wiki_link_parsed = wiki_link.title().replace(" ", "_")
     await ctx.send(f"<https://wiki.theluxuryelevator.com/wiki/{wiki_link_parsed}/>")
