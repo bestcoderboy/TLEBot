@@ -247,7 +247,6 @@ async def random(ctx, *, arg=None):
         "In 2024, The Luxury Elevator will receive a super update, with new floors, a UI overhaul, bug fixes and more.",
         "### ################ ## # ###### #### ####### ####### ######### - ##### # #### ## #######. ### #####...",
         "The game has 48 badges - four of them are future badges and three badges can no longer be obtained.",
-        "There are currently six Trusted Admins, one Admin, and eight VIPs!",
         "More fun facts are coming soon, promise!"
     ]
     embed = discord.Embed(title="Fun fact", color=0xde8114, description=f"""{fun_facts[rand_lib.randrange(0, (len(fun_facts) - 1))]}""")
