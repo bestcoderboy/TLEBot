@@ -270,7 +270,7 @@ Lead Developer / Game Owner: **Ferb_Fletcher**
 async def wikilink(ctx, *, arg=None):
     wiki_link = re.sub(' \(.*?\)', "", arg)
     wiki_link_parsed = wiki_link.title().replace(" ", "_")
-    await ctx.send(f"<https://wiki.theluxuryelevator.com/wiki/{wiki_link_parsed}/>")
+    await ctx.send(f"<https://wiki.theluxuryelevator.com/wiki/{wiki_link_parsed}>")
 
 
 # Running the Discord bot with the provided token
