@@ -297,8 +297,8 @@ async def random(ctx, *, arg=None):
         rand_lib.shuffle(fun_facts)
         fun_fact = fun_facts.pop()
         previous_facts.append(fun_fact)
-        print(previous_facts)
-        print(fun_fact)
+        # print(previous_facts)
+        # print(fun_fact)
     else:
         previous_facts.append(fun_fact)
         fun_fact = fun_facts.pop()
@@ -307,8 +307,8 @@ async def random(ctx, *, arg=None):
             fun_fact = fun_facts.pop()
         if len(previous_facts) > 3:
             previous_facts.pop(1)
-        print(previous_facts)
-        print(fun_fact)
+        # print(previous_facts)
+        # print(fun_fact)
 
     embed = discord.Embed(title="Fun fact", color=0xde8114, description=f"""{fun_fact}""")
     embed.set_footer(text=f"Created by {credit_name} • {version_number}",
