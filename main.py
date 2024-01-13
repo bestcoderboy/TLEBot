@@ -15,7 +15,7 @@ import random as rand_lib                              # For the >random command
 # ---------
 
 # Bot Settings
-command_prefix = "!"
+command_prefix = ">"
 bot_name = "TLEBot"
 bot_description = "A bot created by **@BestSpyBoy**, designed specifically for the Luxury Elevator's official Discord server! Type `>help` to get started."
 version_number = "v1.0.5"
