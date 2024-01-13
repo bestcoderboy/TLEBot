@@ -1,21 +1,41 @@
 # Importing necessary modules and packages
-import difflib
-import discord
-import re
-import requests
-from discord.ext import commands
-import urllib.parse
-from wiki_to_dict import convert_wikitext_to_dict
-import os
-import random as rand_lib
-from dotenv import load_dotenv
+import difflib                                         # Auto command matching on error
+import discord                                         # Literally running the bot
+import re                                              # Regular expressions for wiki search
+import requests                                        # HTTP requests to the wiki API
+from discord.ext import commands                       # For the Discord bot commands
+import urllib.parse                                    # To sanitize user input for the API
+from wiki_to_dict import convert_wikitext_to_dict      # Idk why this is in another file, it's neat i guess
+import os                                              # For getting token from environment variables
+from dotenv import load_dotenv                         # As above
+import random as rand_lib                              # For the >random command
 
+# ---------
+# BOT SETUP
+# ---------
+
+# Bot Settings
+command_prefix = "!"
+bot_name = "TLEBot"
+bot_description = "A bot created by **@BestSpyBoy**, designed specifically for the Luxury Elevator's official Discord server! Type `>help` to get started."
+version_number = "v1.0.5"
+
+# Credit Settings
+# Change this if you want to, but it's nice if you keep credit :)
+credit_name = "BestSpyBoy"
+credit_profile = "https://cdn.discordapp.com/avatars/725417693699899534/1fecf89ce5fefa638d2f273ed1d986aa.webp"
+
+# Gets your bot token from a .env file
 load_dotenv()
+
+# ---------
+# END BOT SETUP
+# ---------
 
 # Setting up Discord bot with command prefix and intents
 intents = discord.Intents.default()
 intents.message_content = True
-bot = commands.Bot(command_prefix='>', intents=intents)
+bot = commands.Bot(command_prefix=command_prefix, intents=intents)
 
 # Removing default help command to replace it with a custom one
 bot.remove_command('help')
@@ -24,34 +44,34 @@ bot.remove_command('help')
 # Function to create a help embed for commands
 def help_embed():
     # Creating an embed object with title, color, and fields
-    embed = discord.Embed(title="TLEWikiBot Help", color=0xde8114)
+    embed = discord.Embed(title=f"{bot_name} Help", color=0xde8114)
     embed.add_field(name=">floor `<page name>`", value="Returns details about the floor given.")
     embed.add_field(name=">search `<query>`", value="Returns search results for that query.")
     embed.add_field(name=">create `<page name>`", value="Generates a link to create a wiki page with the name given.")
     embed.add_field(name=">signup", value="Returns a link to sign up to the Wiki.")
     embed.add_field(name=">help", value="Shows this embed.")
-    embed.set_footer(text="Created by BestSpyBoy • v1.0.3",
-                     icon_url="https://cdn.discordapp.com/avatars/725417693699899534/6d3934a6a8467f0420b530905f7b4361.webp")
+    embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+                     icon_url=credit_profile)
     return embed
 
 
 # Function to create an empty help embed
 def empty_help_embed(name, value):
     # Creating an embed object with title, color, and fields
-    embed = discord.Embed(title="TLEWikiBot Help", color=0xde8114)
+    embed = discord.Embed(title=f"{bot_name} Help", color=0xde8114)
     embed.add_field(name=name, value=value)
-    embed.set_footer(text="Created by BestSpyBoy • v1.0.3",
-                     icon_url="https://cdn.discordapp.com/avatars/725417693699899534/6d3934a6a8467f0420b530905f7b4361.webp")
+    embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+                     icon_url=credit_profile)
     return embed
 
 
 # Function to create an info embed for the bot
 def info_embed():
     # Creating an embed object with title, color, and description
-    embed = discord.Embed(title="TLEWikiBot", color=0xde8114,
-                          description="A bot created by **@BestSpyBoy** to search and explore the Luxury Elevator Wiki! Type `>help` to get started.")
-    embed.set_footer(text="Created by BestSpyBoy • v1.0.3",
-                     icon_url="https://cdn.discordapp.com/avatars/725417693699899534/6d3934a6a8467f0420b530905f7b4361.webp")
+    embed = discord.Embed(title=f"{bot_name}", color=0xde8114,
+                          description=bot_description)
+    embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+                     icon_url=credit_profile)
     return embed
 
 
@@ -60,8 +80,8 @@ def error_embed(error):
     # Creating an embed object with a red color and the provided error message
     print(error)  # Consider removing or replacing this print statement
     embed = discord.Embed(color=0xFF0000, description=error)
-    embed.set_footer(text="Created by BestSpyBoy • v1.0.3",
-                     icon_url="https://cdn.discordapp.com/avatars/725417693699899534/6d3934a6a8467f0420b530905f7b4361.webp")
+    embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+                     icon_url=credit_profile)
     return embed
 
 
@@ -116,9 +136,9 @@ async def floor(ctx, *, arg=None):
 
         # Checking for special arguments and responding accordingly
         if "(embed)" in arguments:
-            await ctx.send("https://wiki.theluxuryelevator.com/wiki/" + wiki_link_parsed)
+            await ctx.send("https://wiki.theluxuryelevator.com/wiki/" + urllib.parse.quote(wiki_link_parsed),)
         elif "(link)" in arguments:
-            await ctx.send("<https://wiki.theluxuryelevator.com/wiki/" + wiki_link_parsed + ">")
+            await ctx.send("<https://wiki.theluxuryelevator.com/wiki/" + urllib.parse.quote(wiki_link_parsed), + ">")
         else:
             try:
                 # Making a request to the Wiki API to retrieve floor details
@@ -137,7 +157,7 @@ async def floor(ctx, *, arg=None):
                 else:
                     floor_attributes = convert_wikitext_to_dict(r_body.get("parse").get("wikitext"))
                     if floor_attributes is None:
-                        await ctx.send(embed=error_embed("That wiki page isn't a floor. Maybe there's no infobox?"))
+                        await ctx.send(embed=error_embed(f"[That wiki page](https://wiki.theluxuryelevator.com/wiki/{urllib.parse.quote(wiki_link_parsed)}) isn't a floor. Maybe there's no infobox?"))
                         return
 
                     # Responding with floor details or a specific attribute if provided
@@ -146,16 +166,15 @@ async def floor(ctx, *, arg=None):
                         for key, value in floor_attributes.items():
                             if key == "image1":
                                 embed.set_image(
-                                    url="https://wiki.theluxuryelevator.com/wiki/Special:Filepath/" + urllib.parse.quote(
-                                        value))
+                                    url="https://wiki.theluxuryelevator.com/wiki/Special:Filepath/" + urllib.parse.quote(value))
                             elif key == "title1":
                                 embed.add_field(name="Name",
                                                 value=f"[{floor_attributes.get('title1')}](https://wiki.theluxuryelevator.com/wiki/{urllib.parse.quote(wiki_link_parsed)})")
                             else:
                                 embed.add_field(name=key.title().replace("_", " "),
                                                 value=value)
-                        embed.set_footer(text="Created by BestSpyBoy • v1.0.3",
-                                         icon_url="https://cdn.discordapp.com/avatars/725417693699899534/6d3934a6a8467f0420b530905f7b4361.webp")
+                        embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+                                         icon_url=credit_profile)
                         await ctx.send(embed=embed)
                     else:
                         attribute_parsed = re.sub('\[', "", attribute[0])
@@ -207,8 +226,8 @@ async def search(ctx, *, arg=None):
                     embed_desc += f"""
 > Note: will only return up to ten results"""
                 embed = discord.Embed(title="Search Results", color=0xde8114, description=embed_desc)
-                embed.set_footer(text="Created by BestSpyBoy • v1.0.3",
-                                 icon_url="https://cdn.discordapp.com/avatars/725417693699899534/6d3934a6a8467f0420b530905f7b4361.webp")
+                embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+                                 icon_url=credit_profile)
                 await ctx.send(embed=embed)
 
         except:
@@ -231,27 +250,69 @@ async def wiki(ctx, *, arg=None):
     elif arg == "signup":
         await ctx.send("<https://wiki.theluxuryelevator.com/wiki/Special:RecentChanges>")
     else:
-        await ctx.send(embed=error_embed("That isn't a "))
+        await ctx.send(embed=error_embed("That isn't a"))  # was an accident, but it's funny so i'm keeping it
+
+
+# Command to link to the Floors List on the Luxury Elevator Wiki
+@bot.command(aliases=['floorslist'])
+async def floorlist(ctx, *, arg=None):
+    await ctx.send("<https://wiki.theluxuryelevator.com/wiki/Floors_List>")
+
+
+# Preparing list of fun facts
+fun_facts = [
+    "If you submit <#561140450962964482> there's a chance it'll get added to the game!",
+    """The Luxury Elevator was once featured on **ItsFunneh's** channel. 
+[The video](https://www.youtube.com/watch?v=AycjO0rwR4E) of her playing the game got 16 million views!""",
+    "The lobby was only added almost two years after the game was first uploaded to Roblox! You would spawn in the elevator instead.",
+    "Several old floors had to be deleted after Roblox introduced their audio update in 2022... wait that's not a fun fact :(",
+    "This bot was created in only two hours, and all the code running it is [available](https://github.com/bestcoderboy/TLEbot) for anyone to use on their own server!",
+    "In 2024, The Luxury Elevator will receive a super update, with new floors, a UI overhaul, bug fixes and more.",
+    "### ################ ## # ###### #### ####### ####### ######### - ##### # #### ## #######. ### #####...",
+    "The game has 48 badges - four of them are future badges and three badges can no longer be obtained.",
+    "More fun facts are coming soon, promise!"
+]
+
+fun_fact = ""
+previous_facts = []
 
 
 # Command to give random facts - why not?
 @bot.command(aliases=['fact', 'randomfact', 'funfact', 'facts'])
 async def random(ctx, *, arg=None):
-    fun_facts = [
-        "If you submit <#561140450962964482> there's a chance it'll get added to the game!",
-        """The Luxury Elevator was once featured on **ItsFunneh's** channel. 
-[The video](https://www.youtube.com/watch?v=AycjO0rwR4E) of her playing the game got 16 million views!""",
-        "The lobby was only added almost two years after the game was first uploaded to Roblox! You would spawn in the elevator instead.",
-        "Several old floors had to be deleted after Roblox introduced their audio update in 2022... wait that's not a fun fact :(",
-        "This bot was created in only two hours, and all the code running it is [available](https://github.com/bestcoderboy/TLEbot) for anyone to use on their own server!",
-        "In 2024, The Luxury Elevator will receive a super update, with new floors, a UI overhaul, bug fixes and more.",
-        "### ################ ## # ###### #### ####### ####### ######### - ##### # #### ## #######. ### #####...",
-        "The game has 48 badges - four of them are future badges and three badges can no longer be obtained.",
-        "More fun facts are coming soon, promise!"
-    ]
-    embed = discord.Embed(title="Fun fact", color=0xde8114, description=f"""{fun_facts[rand_lib.randrange(0, (len(fun_facts) - 1))]}""")
-    embed.set_footer(text="Created by BestSpyBoy • v1.0.3",
-                     icon_url="https://cdn.discordapp.com/avatars/725417693699899534/6d3934a6a8467f0420b530905f7b4361.webp")
+    global fun_facts, fun_fact, previous_facts  # Needed to stop error
+    if len(fun_facts) == 0:  # Resets the fun facts
+        fun_facts = [
+            "If you submit <#561140450962964482> there's a chance it'll get added to the game!",
+            """The Luxury Elevator was once featured on **ItsFunneh's** channel. 
+    [The video](https://www.youtube.com/watch?v=AycjO0rwR4E) of her playing the game got 16 million views!""",
+            "The lobby was only added almost two years after the game was first uploaded to Roblox! You would spawn in the elevator instead.",
+            "Several old floors had to be deleted after Roblox introduced their audio update in 2022... wait that's not a fun fact :(",
+            "This bot was created in only two hours, and all the code running it is [available](https://github.com/bestcoderboy/TLEbot) for anyone to use on their own server!",
+            "In 2024, The Luxury Elevator will receive a super update, with new floors, a UI overhaul, bug fixes and more.",
+            "### ################ ## # ###### #### ####### ####### ######### - ##### # #### ## #######. ### #####...",
+            "The game has 48 badges - four of them are future badges and three badges can no longer be obtained.",
+            "More fun facts are coming soon, promise!"
+        ]
+        rand_lib.shuffle(fun_facts)
+        fun_fact = fun_facts.pop()
+        previous_facts.append(fun_fact)
+        print(previous_facts)
+        print(fun_fact)
+    else:
+        previous_facts.append(fun_fact)
+        fun_fact = fun_facts.pop()
+        if fun_fact in previous_facts:
+            fun_facts.insert(0, fun_fact)
+            fun_fact = fun_facts.pop()
+        if len(previous_facts) > 3:
+            previous_facts.pop(1)
+        print(previous_facts)
+        print(fun_fact)
+
+    embed = discord.Embed(title="Fun fact", color=0xde8114, description=f"""{fun_fact}""")
+    embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+                     icon_url=credit_profile)
     await ctx.send(embed=embed)
 
 @bot.command(aliases=['credit'])
@@ -260,17 +321,20 @@ async def credits(ctx, *, arg=None):
 Lead Developer / Game Owner: **Ferb_Fletcher**
 (retired) Developer: **Phineas_Flynn**
     """)
-    embed.set_footer(text="Created by BestSpyBoy • v1.0.3",
-                     icon_url="https://cdn.discordapp.com/avatars/725417693699899534/6d3934a6a8467f0420b530905f7b4361.webp")
+    embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+                     icon_url=credit_profile)
     await ctx.send(embed=embed)
 
 
 # Command to provide a link to recent changes on the Luxury Elevator Wiki
-@bot.command()
+@bot.command(aliases=['link'])
 async def wikilink(ctx, *, arg=None):
-    wiki_link = re.sub(' \(.*?\)', "", arg)
-    wiki_link_parsed = wiki_link.title().replace(" ", "_")
-    await ctx.send(f"<https://wiki.theluxuryelevator.com/wiki/{wiki_link_parsed}>")
+    if arg is None:
+        await ctx.send(embed=error_embed("`>wikilink` requires an argument."))
+    else:
+        wiki_link = re.sub(' \(.*?\)', "", arg)
+        wiki_link_parsed = wiki_link.title().replace(" ", "_")
+        await ctx.send(f"<https://wiki.theluxuryelevator.com/wiki/{wiki_link_parsed}>")
 
 
 # Running the Discord bot with the provided token
