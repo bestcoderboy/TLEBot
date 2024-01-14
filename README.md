@@ -17,7 +17,7 @@ This guide is for how to set up and run the bot on a server / computer.
 
 **If you don't want to run it on your own computer**, we recommend using a [DigitalOcean droplet](https://m.do.co/c/084de397ebb4) (get $200 in credit with this affiliate link).
 
-If you're a Python and Git user already, you can skip to [this section](#i-have-everything-set-up-now-what) to start running the bot. 
+If you're a Python and Git user already, you can skip to [this section](#-running-the-bot) to start running the bot. 
 
 Otherwise, we recommend reading the guide below to set up and run the bot for your own server.
 
