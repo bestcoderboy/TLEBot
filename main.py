@@ -15,10 +15,16 @@ import random as rand_lib                              # For the >random command
 # ---------
 
 # Bot Settings
-command_prefix = ">"
+bot_command_prefix = "!"
 bot_name = "TLEBot"
 bot_description = "A bot created by **@BestSpyBoy**, designed specifically for the Luxury Elevator's official Discord server! Type `>help` to get started."
-version_number = "v1.0.5"
+bot_brand_color = 0xde8114
+# Changes every update. This shouldn't be edited unless you're forking your own version.
+bot_version_number = "v1.0.5"
+
+# Wiki Settings
+wiki_commands_enabled = True  # Set to True if you have a MediaWiki setup (includes Fandom)
+wiki_url = "https://wiki.theluxuryelevator.com"  # Change to your wiki domain, for example: "https://doors-game.fandom.com"
 
 # Credit Settings
 # Change this if you want to, but it's nice if you keep credit :)
@@ -35,7 +41,7 @@ load_dotenv()
 # Setting up Discord bot with command prefix and intents
 intents = discord.Intents.default()
 intents.message_content = True
-bot = commands.Bot(command_prefix=command_prefix, intents=intents)
+bot = commands.Bot(command_prefix=bot_command_prefix, intents=intents)
 
 # Removing default help command to replace it with a custom one
 bot.remove_command('help')
@@ -44,13 +50,13 @@ bot.remove_command('help')
 # Function to create a help embed for commands
 def help_embed():
     # Creating an embed object with title, color, and fields
-    embed = discord.Embed(title=f"{bot_name} Help", color=0xde8114)
+    embed = discord.Embed(title=f"{bot_name} Help", color=bot_brand_color)
     embed.add_field(name=">floor `<page name>`", value="Returns details about the floor given.")
     embed.add_field(name=">search `<query>`", value="Returns search results for that query.")
     embed.add_field(name=">create `<page name>`", value="Generates a link to create a wiki page with the name given.")
     embed.add_field(name=">signup", value="Returns a link to sign up to the Wiki.")
     embed.add_field(name=">help", value="Shows this embed.")
-    embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+    embed.set_footer(text=f"Created by {credit_name} • {bot_version_number}",
                      icon_url=credit_profile)
     return embed
 
@@ -58,9 +64,9 @@ def help_embed():
 # Function to create an empty help embed
 def empty_help_embed(name, value):
     # Creating an embed object with title, color, and fields
-    embed = discord.Embed(title=f"{bot_name} Help", color=0xde8114)
+    embed = discord.Embed(title=f"{bot_name} Help", color=bot_brand_color)
     embed.add_field(name=name, value=value)
-    embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+    embed.set_footer(text=f"Created by {credit_name} • {bot_version_number}",
                      icon_url=credit_profile)
     return embed
 
@@ -68,9 +74,9 @@ def empty_help_embed(name, value):
 # Function to create an info embed for the bot
 def info_embed():
     # Creating an embed object with title, color, and description
-    embed = discord.Embed(title=f"{bot_name}", color=0xde8114,
+    embed = discord.Embed(title=f"{bot_name}", color=bot_brand_color,
                           description=bot_description)
-    embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+    embed.set_footer(text=f"Created by {credit_name} • {bot_version_number}",
                      icon_url=credit_profile)
     return embed
 
@@ -78,9 +84,8 @@ def info_embed():
 # Function to create an error embed with a given error message
 def error_embed(error):
     # Creating an embed object with a red color and the provided error message
-    print(error)  # Consider removing or replacing this print statement
     embed = discord.Embed(color=0xFF0000, description=error)
-    embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+    embed.set_footer(text=f"Created by {credit_name} • {bot_version_number}",
                      icon_url=credit_profile)
     return embed
 
@@ -99,7 +104,7 @@ async def on_command_error(ctx, error):
             await ctx.send(embed=error_embed("Command not found. Use '>help' to see available commands."))
     else:
         # Handling other unexpected errors by providing a detailed error message
-        await ctx.send(embed=error_embed(f"""An unexpected error occurred when running that command. Ping **@BestSpyBoy** for help.
+        await ctx.send(embed=error_embed(f"""An unexpected error occurred when running that command. Ping **@{credit_name}** for help.
 ||```elixir
 #{repr(error)}
 ```||"""))
@@ -120,12 +125,11 @@ async def info(ctx):
     await ctx.send(embed=info_embed())
 
 
-# Command to fetch details about a floor from the Luxury Elevator Wiki
-@bot.command()
-async def floor(ctx, *, arg=None):
-    print(">floor")  # Consider removing or replacing this print statement
+# Command to fetch details about a page in the Wiki
+@bot.command(aliases=['floor'])
+async def page(ctx, *, arg=None):
     if arg is None:
-        await ctx.send("<https://wiki.theluxuryelevator.com>")
+        await ctx.send(f"<{wiki_url}>")
     else:
         # Parsing arguments and creating a link to the Wiki based on user input
         arguments = re.findall(r'\(.*?\)', arg)
@@ -136,9 +140,9 @@ async def floor(ctx, *, arg=None):
 
         # Checking for special arguments and responding accordingly
         if "(embed)" in arguments:
-            await ctx.send("https://wiki.theluxuryelevator.com/wiki/" + urllib.parse.quote(wiki_link_parsed),)
+            await ctx.send(f"{wiki_url}/wiki/" + urllib.parse.quote(wiki_link_parsed),)
         elif "(link)" in arguments:
-            await ctx.send("<https://wiki.theluxuryelevator.com/wiki/" + urllib.parse.quote(wiki_link_parsed), + ">")
+            await ctx.send(f"<{wiki_url}/wiki/" + urllib.parse.quote(wiki_link_parsed), + ">")
         else:
             try:
                 # Making a request to the Wiki API to retrieve floor details
@@ -149,7 +153,7 @@ async def floor(ctx, *, arg=None):
                     "formatversion": 2,
                     "format": "json"
                 }
-                r = requests.get("https://wiki.theluxuryelevator.com/w/api.php", params=params)
+                r = requests.get(f"{wiki_url}/w/api.php", params=params)
                 r_body = r.json()
                 if "error" in r.text:
                     await ctx.send(
@@ -157,23 +161,23 @@ async def floor(ctx, *, arg=None):
                 else:
                     floor_attributes = convert_wikitext_to_dict(r_body.get("parse").get("wikitext"))
                     if floor_attributes is None:
-                        await ctx.send(embed=error_embed(f"[That wiki page](https://wiki.theluxuryelevator.com/wiki/{urllib.parse.quote(wiki_link_parsed)}) isn't a floor. Maybe there's no infobox?"))
+                        await ctx.send(embed=error_embed(f"[That wiki page]({wiki_url}/wiki/{urllib.parse.quote(wiki_link_parsed)}) isn't a floor. Maybe there's no infobox?"))
                         return
 
                     # Responding with floor details or a specific attribute if provided
                     if not attribute:
-                        embed = discord.Embed(title="Floor Details", color=0xde8114)
+                        embed = discord.Embed(title="Floor Details", color=bot_brand_color)
                         for key, value in floor_attributes.items():
                             if key == "image1":
                                 embed.set_image(
-                                    url="https://wiki.theluxuryelevator.com/wiki/Special:Filepath/" + urllib.parse.quote(value))
+                                    url=f"{wiki_url}/wiki/Special:Filepath/" + urllib.parse.quote(value))
                             elif key == "title1":
                                 embed.add_field(name="Name",
-                                                value=f"[{floor_attributes.get('title1')}](https://wiki.theluxuryelevator.com/wiki/{urllib.parse.quote(wiki_link_parsed)})")
+                                                value=f"[{floor_attributes.get('title1')}]({wiki_url}/wiki/{urllib.parse.quote(wiki_link_parsed)})")
                             else:
                                 embed.add_field(name=key.title().replace("_", " "),
                                                 value=value)
-                        embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+                        embed.set_footer(text=f"Created by {credit_name} • {bot_version_number}",
                                          icon_url=credit_profile)
                         await ctx.send(embed=embed)
                     else:
@@ -193,10 +197,10 @@ async def create(ctx, *, arg=None):
     else:
         wiki_link = re.sub(' \(.*?\)', "", arg)
         wiki_link_parsed = wiki_link.title().replace(" ", "_")
-        await ctx.send("<https://wiki.theluxuryelevator.com/w/index.php?title=" + wiki_link_parsed + "&veaction=edit>")
+        await ctx.send(f"<{wiki_url}/w/index.php?title=" + wiki_link_parsed + "&veaction=edit>")
 
 
-# Command to search the Luxury Elevator Wiki and display results
+# Command to search the Wiki and display results
 @bot.command()
 async def search(ctx, *, arg=None):
     if arg is None:
@@ -210,7 +214,7 @@ async def search(ctx, *, arg=None):
                 "srsearch": urllib.parse.quote(arg),
                 "format": "json"
             }
-            r = requests.get("https://wiki.theluxuryelevator.com/w/api.php", params=params)
+            r = requests.get(f"{wiki_url}/w/api.php", params=params)
             r_body = r.json()
             search_array = r_body.get("query").get("search")
 
@@ -225,8 +229,8 @@ async def search(ctx, *, arg=None):
                 if len(search_array) == 10:
                     embed_desc += f"""
 > Note: will only return up to ten results"""
-                embed = discord.Embed(title="Search Results", color=0xde8114, description=embed_desc)
-                embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+                embed = discord.Embed(title="Search Results", color=bot_brand_color, description=embed_desc)
+                embed.set_footer(text=f"Created by {credit_name} • {bot_version_number}",
                                  icon_url=credit_profile)
                 await ctx.send(embed=embed)
 
@@ -234,29 +238,39 @@ async def search(ctx, *, arg=None):
             await ctx.send(embed=error_embed("Something went wrong processing your search."))
 
 
-# Command to provide a link for users to sign up on the Luxury Elevator Wiki
+# Command to provide a link for users to sign up on the Wiki
 @bot.command()
 async def signup(ctx, *, arg=None):
-    await ctx.send("<https://wiki.theluxuryelevator.com/wiki/Special:CreateAccount>")
+    await ctx.send(f"<{wiki_url}/wiki/Special:CreateAccount>")
 
 
-# Command to provide links to the Luxury Elevator Wiki
+# Command to provide special links to the Wiki
 @bot.command()
 async def wiki(ctx, *, arg=None):
     if arg is None:
-        await ctx.send("<https://wiki.theluxuryelevator.com>")
+        await ctx.send(f"<{wiki_url}>")
     elif arg == "recent":
-        await ctx.send("<https://wiki.theluxuryelevator.com/wiki/Special:RecentChanges>")
+        await ctx.send(f"<{wiki_url}/wiki/Special:RecentChanges>")
     elif arg == "signup":
-        await ctx.send("<https://wiki.theluxuryelevator.com/wiki/Special:RecentChanges>")
+        await ctx.send(f"<{wiki_url}/wiki/Special:RecentChanges>")
     else:
         await ctx.send(embed=error_embed("That isn't a"))  # was an accident, but it's funny so i'm keeping it
 
 
+# Command to provide a link to pages on the Wiki
+@bot.command(aliases=['link'])
+async def wikilink(ctx, *, arg=None):
+    if arg is None:
+        await ctx.send(embed=error_embed("`>wikilink` requires an argument."))
+    else:
+        wiki_link = re.sub(' \(.*?\)', "", arg)
+        wiki_link_parsed = wiki_link.title().replace(" ", "_")
+        await ctx.send(f"<{wiki_url}/wiki/{wiki_link_parsed}>")
+
 # Command to link to the Floors List on the Luxury Elevator Wiki
 @bot.command(aliases=['floorslist'])
 async def floorlist(ctx, *, arg=None):
-    await ctx.send("<https://wiki.theluxuryelevator.com/wiki/Floors_List>")
+    await ctx.send(f"<{wiki_url}/wiki/Floors_List>")
 
 
 # Preparing list of fun facts
@@ -273,14 +287,14 @@ fun_facts = [
     "More fun facts are coming soon, promise!"
 ]
 
-fun_fact = ""
+current_fun_fact = ""
 previous_facts = []
 
 
 # Command to give random facts - why not?
 @bot.command(aliases=['fact', 'randomfact', 'funfact', 'facts'])
 async def random(ctx, *, arg=None):
-    global fun_facts, fun_fact, previous_facts  # Needed to stop error
+    global fun_facts, current_fun_fact, previous_facts  # Needed to stop error
     if len(fun_facts) == 0:  # Resets the fun facts
         fun_facts = [
             "If you submit <#561140450962964482> there's a chance it'll get added to the game!",
@@ -300,7 +314,7 @@ async def random(ctx, *, arg=None):
         # print(previous_facts)
         # print(fun_fact)
     else:
-        previous_facts.append(fun_fact)
+        previous_facts.append(current_fun_fact)
         fun_fact = fun_facts.pop()
         if fun_fact in previous_facts:
             fun_facts.insert(0, fun_fact)
@@ -310,31 +324,20 @@ async def random(ctx, *, arg=None):
         # print(previous_facts)
         # print(fun_fact)
 
-    embed = discord.Embed(title="Fun fact", color=0xde8114, description=f"""{fun_fact}""")
-    embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+    embed = discord.Embed(title="Fun fact", color=bot_brand_color, description=f"""{current_fun_fact}""")
+    embed.set_footer(text=f"Created by {credit_name} • {bot_version_number}",
                      icon_url=credit_profile)
     await ctx.send(embed=embed)
 
 @bot.command(aliases=['credit'])
 async def credits(ctx, *, arg=None):
-    embed = discord.Embed(title="TLE Credits", color=0xde8114, description=f"""Game Creator: **Milo Murphy**
+    embed = discord.Embed(title="TLE Credits", color=bot_brand_color, description=f"""Game Creator: **Milo Murphy**
 Lead Developer / Game Owner: **Ferb_Fletcher**
 (retired) Developer: **Phineas_Flynn**
     """)
-    embed.set_footer(text=f"Created by {credit_name} • {version_number}",
+    embed.set_footer(text=f"Created by {credit_name} • {bot_version_number}",
                      icon_url=credit_profile)
     await ctx.send(embed=embed)
-
-
-# Command to provide a link to recent changes on the Luxury Elevator Wiki
-@bot.command(aliases=['link'])
-async def wikilink(ctx, *, arg=None):
-    if arg is None:
-        await ctx.send(embed=error_embed("`>wikilink` requires an argument."))
-    else:
-        wiki_link = re.sub(' \(.*?\)', "", arg)
-        wiki_link_parsed = wiki_link.title().replace(" ", "_")
-        await ctx.send(f"<https://wiki.theluxuryelevator.com/wiki/{wiki_link_parsed}>")
 
 
 # Running the Discord bot with the provided token

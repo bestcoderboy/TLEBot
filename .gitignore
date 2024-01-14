@@ -1,2 +1,4 @@
 .env
 .idea/
+# For the virtual environment.
+discord-bot/
