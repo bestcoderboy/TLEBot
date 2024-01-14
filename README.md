@@ -1,18 +1,42 @@
 # TLEBot
 
+![Version v1.0.5](https://img.shields.io/badge/version-v1.0.5-g)
+![Language: Python](https://img.shields.io/badge/language-python-blue)
+![Commits](https://img.shields.io/github/commit-activity/t/bestcoderboy/TLEBot?color=red)
+![License](https://img.shields.io/github/license/bestcoderboy/TLEBot)
+
 🤖 **A multi-purpose Discord bot for game servers, originally designed for The Luxury Elevator.**
 
 ⚒️ **Easy to set up and available to use for any game's Discord server, official or otherwise.**
 
 🌐 **Links with MediaWiki or Fandom wikis seamlessly, with easily customisable commands.**
 
-🎨 **Customise your bot's appearance and profile.**
+🎨 **Customise your bot's appearance and profile, and completely control its data.**
 ## 💻 Get started with the bot
+This guide is for how to set up and run the bot on a server / computer. 
+
+**If you don't want to run it on your own computer**, we recommend using a [DigitalOcean droplet](https://m.do.co/c/084de397ebb4) (get $200 in credit with this affiliate link).
+
 If you're a Python and Git user already, you can skip to [this section](#i-have-everything-set-up-now-what) to start running the bot. 
 
 Otherwise, we recommend reading the guide below to set up and run the bot for your own server.
 
-## 🤔 I'm a beginner. How do I run the bot?
+## 🔑 Creating the bot's account
+To create an "application" or bot on Discord, you first need to go to the [**Discord Developer Portal**](https://discord.com/developers/applications).
+
+Once you're logged in, click the **"New Application"** button in the top-right corner, type in your bot's name and accept the Developer Terms of Service.
+
+This is where you can customise the bot's appearance. You can add a profile picture, change its description - add tags if you really want to!
+
+Next, you're going to go to the **Bot** section. Here, you'll see the bot has already been created. Scroll down and toggle **"Message Content Intent"**.
+
+You could get your bot token now, but you'll only need it at the end, so for now let's add the bot to your server.
+
+Go to the **OAuth2** section of the page, and click **URL Generator**. You'll see checkboxes - tick `bot`, then when the second box appears tick `Send Messages`.
+
+Scroll down to the bottom and click the **Copy** button to copy the invite link to your clipboard. Open a new tab, paste the URL and add the bot to your server.
+
+## 🤔 Setting up your computer for the bot
 First, let's check if you have Python installed on your computer by opening your computer's terminal.
 
 On Windows, this is called **PowerShell** or **Command Prompt** (they do the same thing), and on macOS it is called **Terminal**.
@@ -27,7 +51,7 @@ Now let's check for Git, another tool we need to use during setup. Run `git --ve
 
 Now you can proceed to the next step - setting up the bot.
 
-## 🧑‍💻 I have everything set up. Now what?
+## 🧑‍💻 Running the bot
 
 Let's get the code to run the bot ready. Create a new folder anywhere you want, then open your terminal again.
 
@@ -42,14 +66,19 @@ Once the virtual environment is created, run the activation script for your OS:
  - Windows: `.\discord-bot\Scripts\activate` for Command Prompt, `.\discord-bot\Scripts\Activate.ps1` for PowerShell
  - Mac or Linux: `source discord-bot/bin/activate`
 
-After running the script, you will see the name of the environment, like `(discord-bot)`, next to the shell.
+After running the script, you will see the name of the environment like `(discord-bot)` next to the shell.
 
-Run `pip install -r requirements.txt` to install all the necessary packages for the bot.
+Next, run `pip install -r requirements.txt` to install all the Python packages needed to run the bot.
 
-Then create a `.env` file and put your discord token inside like this:
+Now you'll get your **bot token**. Remember the [Discord Developer Portal](https://discord.com/developers/applications)? Let's go back to your application's **Bot** tab again.
+
+Click **"Reset Token"**, and if you have two-factor authentication, verify yourself with the code. You'll see the token to copy on the screen.
+> ⚠️ **This token should be kept very safe - treat it like your password and don't share it with anyone.**
+
+To authenticate the bot, create a `.env` file inside the folder and put the bot token you just copied inside it like this:
 
 ```env
-DISCORD_TOKEN=<YOUR-TOKEN-HERE>
+DISCORD_TOKEN=ABCDEF123-your-token-here-456WXYZ
 ```
 
 Finally, run `python main.py` to run the script and start the bot.
