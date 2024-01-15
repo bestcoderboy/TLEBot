@@ -15,12 +15,12 @@ import random as rand_lib                              # For the >random command
 # ---------
 
 # Bot Settings
-bot_command_prefix = "!"
+bot_command_prefix = ">"
 bot_name = "TLEBot"
 bot_description = "A bot created by **@BestSpyBoy**, designed specifically for the Luxury Elevator's official Discord server! Type `>help` to get started."
 bot_brand_color = 0xde8114
 # Changes every update. This shouldn't be edited unless you're forking your own version.
-bot_version_number = "v1.0.5"
+bot_version_number = "v1.1.0"
 
 # Wiki Settings
 wiki_commands_enabled = True  # Set to True if you have a MediaWiki setup (includes Fandom)
