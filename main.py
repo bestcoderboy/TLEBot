@@ -15,7 +15,7 @@ import random as rand_lib                              # For the >random command
 # ---------
 
 # Bot Settings
-bot_command_prefix = ">"
+bot_command_prefix = "!"
 bot_name = "TLEBot"
 bot_description = "A bot created by **@BestSpyBoy**, designed specifically for the Luxury Elevator's official Discord server! Type `>help` to get started."
 bot_brand_color = 0xde8114
@@ -128,12 +128,14 @@ async def info(ctx):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def settings(ctx, *, arg=None):
+    print("settings")
     if arg is None:
+        print("no")
         await ctx.send(embed=error_embed(">settings needs an option to change and a value."))
     else:
-        selectedSetting = arg.split(" ", 1)[0]
-        if selectedSetting[0] == "activity":
-            command = arg.split(" ", 2)  # ["activity", <action>, <param with spaces>]
+        command = arg.split(" ", 2)
+        print(command)
+        if command[0] == "activity":
             # could do streaming here but w h y
             if command[1] == "playing" and len(command) == 3:
                 await bot.change_presence(activity=discord.Game(name=command[2]))
