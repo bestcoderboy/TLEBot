@@ -102,6 +102,8 @@ async def on_command_error(ctx, error):
             await ctx.send(embed=error_embed(f"Did you mean `{bot.command_prefix}{closest_match[0]}`?"))
         else:
             await ctx.send(embed=error_embed("Command not found. Use '>help' to see available commands."))
+    elif isinstance(error, commands.MissingPermissions):
+        await ctx.send(embed=error_embed("⚠️ This is an admin-only command - check you have the permissions to run it."))
     else:
         # Handling other unexpected errors by providing a detailed error message
         await ctx.send(embed=error_embed(f"""An unexpected error occurred when running that command. Ping **@{credit_name}** for help.
@@ -113,16 +115,34 @@ async def on_command_error(ctx, error):
 # Command to display help information
 @bot.command(aliases=['commands'])
 async def help(ctx, *, arg=None):
-    if arg is None:
-        await ctx.send(embed=help_embed())
-    else:
-        await ctx.send(embed=help_embed())
+    await ctx.send(embed=help_embed())
 
 
 # Command to display bot information
 @bot.command(aliases=['information'])
 async def info(ctx):
     await ctx.send(embed=info_embed())
+
+
+# Command to change the bot's settings. TODO: Expand settings to change from bot
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def settings(ctx, *, arg=None):
+    if arg is None:
+        await ctx.send(embed=error_embed(">settings needs an option to change and a value."))
+    else:
+        selectedSetting = arg.split(" ", 1)[0]
+        if selectedSetting[0] == "activity":
+            command = arg.split(" ", 2)  # ["activity", <action>, <param with spaces>]
+            # could do streaming here but w h y
+            if command[1] == "playing" and len(command) == 3:
+                await bot.change_presence(activity=discord.Game(name=command[2]))
+            elif command[1] == "listening":
+                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=command[2]))
+            elif command[1] == "watching":
+                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=command[2]))
+            else:
+                await ctx.send(embed=error_embed("Invalid syntax for the activity setting."))
 
 
 # Command to fetch details about a page in the Wiki
@@ -274,7 +294,7 @@ async def floorlist(ctx, *, arg=None):
 
 
 # Preparing list of fun facts
-fun_facts = [
+original_fun_facts = [
     "If you submit <#561140450962964482> there's a chance it'll get added to the game!",
     """The Luxury Elevator was once featured on **ItsFunneh's** channel. 
 [The video](https://www.youtube.com/watch?v=AycjO0rwR4E) of her playing the game got 16 million views!""",
@@ -286,6 +306,7 @@ fun_facts = [
     "The game has 48 badges - four of them are future badges and three badges can no longer be obtained.",
     "More fun facts are coming soon, promise!"
 ]
+fun_facts = original_fun_facts
 
 current_fun_fact = ""
 previous_facts = []
@@ -296,18 +317,7 @@ previous_facts = []
 async def random(ctx, *, arg=None):
     global fun_facts, current_fun_fact, previous_facts  # Needed to stop error
     if len(fun_facts) == 0:  # Resets the fun facts
-        fun_facts = [
-            "If you submit <#561140450962964482> there's a chance it'll get added to the game!",
-            """The Luxury Elevator was once featured on **ItsFunneh's** channel. 
-    [The video](https://www.youtube.com/watch?v=AycjO0rwR4E) of her playing the game got 16 million views!""",
-            "The lobby was only added almost two years after the game was first uploaded to Roblox! You would spawn in the elevator instead.",
-            "Several old floors had to be deleted after Roblox introduced their audio update in 2022... wait that's not a fun fact :(",
-            "This bot was created in only two hours, and all the code running it is [available](https://github.com/bestcoderboy/TLEbot) for anyone to use on their own server!",
-            "In 2024, The Luxury Elevator will receive a super update, with new floors, a UI overhaul, bug fixes and more.",
-            "### ################ ## # ###### #### ####### ####### ######### - ##### # #### ## #######. ### #####...",
-            "The game has 48 badges - four of them are future badges and three badges can no longer be obtained.",
-            "More fun facts are coming soon, promise!"
-        ]
+        fun_facts = original_fun_facts
         rand_lib.shuffle(fun_facts)
         fun_fact = fun_facts.pop()
         previous_facts.append(fun_fact)

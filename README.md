@@ -1,9 +1,9 @@
 # TLEBot
 
-![Version v1.0.5](https://img.shields.io/badge/version-v1.0.5-g)
+![GitHub Release](https://img.shields.io/github/v/release/bestcoderboy/TLEBot?color=g)
 ![Language: Python](https://img.shields.io/badge/language-python-blue)
-![Commits](https://img.shields.io/github/commit-activity/t/bestcoderboy/TLEBot?color=red)
-![License](https://img.shields.io/github/license/bestcoderboy/TLEBot)
+![GitHub Commits](https://img.shields.io/github/commit-activity/t/bestcoderboy/TLEBot?color=red)
+![GitHub License](https://img.shields.io/github/license/bestcoderboy/TLEBot)
 
 🤖 **A multi-purpose Discord bot for game servers, originally designed for The Luxury Elevator.**
 
@@ -17,7 +17,7 @@ This guide is for how to set up and run the bot on a server / computer.
 
 **If you don't want to run it on your own computer**, we recommend using a [DigitalOcean droplet](https://m.do.co/c/084de397ebb4) (get $200 in credit with this affiliate link).
 
-If you're a Python and Git user already, you can skip to [this section](#-running-the-bot) to start running the bot. 
+If you're a Python and Git user already, and have set up your Discord bot, you can skip to [this section](#-running-the-bot) to start running the bot. 
 
 Otherwise, we recommend reading the guide below to set up and run the bot for your own server.
 
