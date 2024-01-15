@@ -15,7 +15,7 @@ import random as rand_lib                              # For the >random command
 # ---------
 
 # Bot Settings
-bot_command_prefix = "!"
+bot_command_prefix = ">"
 bot_name = "TLEBot"
 bot_description = "A bot created by **@BestSpyBoy**, designed specifically for the Luxury Elevator's official Discord server! Type `>help` to get started."
 bot_brand_color = 0xde8114
@@ -83,6 +83,7 @@ def info_embed():
 
 # Function to create an error embed with a given error message
 def error_embed(error):
+    print(error)
     # Creating an embed object with a red color and the provided error message
     embed = discord.Embed(color=0xFF0000, description=error)
     embed.set_footer(text=f"Created by {credit_name} • {bot_version_number}",
@@ -128,13 +129,10 @@ async def info(ctx):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def settings(ctx, *, arg=None):
-    print("settings")
     if arg is None:
-        print("no")
         await ctx.send(embed=error_embed(">settings needs an option to change and a value."))
     else:
         command = arg.split(" ", 2)
-        print(command)
         if command[0] == "activity":
             # could do streaming here but w h y
             if command[1] == "playing" and len(command) == 3:
