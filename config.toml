@@ -1,0 +1,14 @@
+BotName = "TLEBot"
+BotPrefix = ">"
+BotDescription = "A bot created by **@BestSpyBoy**, designed specifically for the Luxury Elevator's official Discord server! Type `>help` to get started."
+BotBrandColor = 0xde8114    # Your brand color in a HEX color code. Add 0x so Python knows it's a HEX color.
+BotVersionNumber = "v1.2.1" # Changes every update. This shouldn't be edited unless you're forking your own version.
+
+[wiki]
+WikiCommandsEnabled = true  # Set to True if you have a MediaWiki setup (includes Fandom)
+WikiURL = "https://wiki.theluxuryelevator.com"  # Change to your wiki domain, for example: "https://doors-game.fandom.com"
+
+[credits]
+# You can change these if you really want, but I'd appreciate if they stay :)
+CreditName = "BestSpyBoy"
+CreditProfile = "https://cdn.discordapp.com/avatars/725417693699899534/1fecf89ce5fefa638d2f273ed1d986aa.webp"
