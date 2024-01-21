@@ -1,14 +1,36 @@
-BotName = "TLEBot"
-BotPrefix = ">"
-BotDescription = "A bot created by **@BestSpyBoy**, designed specifically for the Luxury Elevator's official Discord server! Type `>help` to get started."
-BotBrandColor = 0xde8114    # Your brand color in a HEX color code. Add 0x so Python knows it's a HEX color.
-BotVersionNumber = "v1.2.1" # Changes every update. This shouldn't be edited unless you're forking your own version.
+#################################################################################################################################################################################
+# Bot Settings
 
-[wiki]
-WikiCommandsEnabled = true  # Set to True if you have a MediaWiki setup (includes Fandom)
-WikiURL = "https://wiki.theluxuryelevator.com"  # Change to your wiki domain, for example: "https://doors-game.fandom.com"
+# Used in certain embeds, can be different to the bot's actual name / nickname
+Bot.Name        = "TLEBot"
 
-[credits]
+# Use / to enable slash commands. If you're using prefixes, we recommend ">" to avoid conflict.
+Bot.Prefix      = "/"
+
+# Used for the info command. Supports Markdown. Leave blank to disable that command.
+Bot.Description = "A bot created by **@BestSpyBoy**, designed specifically for the Luxury Elevator's official Discord server! Type `>help` to get started."
+
+# Your brand color in a HEX color code, used in embeds. Add 0x so Python knows it's a HEX color.
+Bot.BrandColor  = 0xde8114
+
+# Changes every update. This shouldn't be edited unless you're forking your own version.
+Bot.Version     = "v1.3.1"
+
+# A list of enabled modules. Find all available modules in the /commands/ folder.
+Bot.Modules     = [
+    "custom",   # /bot/commands/custom.py
+    "wiki"      # /bot/commands/wiki.py
+]
+
 # You can change these if you really want, but I'd appreciate if they stay :)
-CreditName = "BestSpyBoy"
-CreditProfile = "https://cdn.discordapp.com/avatars/725417693699899534/1fecf89ce5fefa638d2f273ed1d986aa.webp"
+Credit.Name      = "BestSpyBoy"
+
+Credit.Profile   = "https://cdn.discordapp.com/avatars/725417693699899534/1fecf89ce5fefa638d2f273ed1d986aa.webp"
+#################################################################################################################################################################################
+# Module Settings
+
+# For example, the Wiki module requires a variable called URL
+Wiki.URL         = "https://wiki.theluxuryelevator.com"  # Change to your wiki domain, for example: "https://doors-game.fandom.com"
+
+# You can also add a # symbol before a variable to disable it.
+#################################################################################################################################################################################

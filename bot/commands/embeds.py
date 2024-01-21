@@ -1,21 +1,21 @@
 import os
 import discord
 import toml
-
 from os import path
 
+# --- IMPORT SETTINGS ---
 basepath = path.dirname(__file__)
-filepath = path.abspath(path.join(basepath, "..", "config.toml"))
+filepath = path.abspath(path.join(basepath, "../..", "config.toml"))
 with open(filepath, "r") as f:
     data = toml.load(f)
-    bot_name = data['BotName']
-    bot_description = data['BotDescription']
-    bot_prefix = data['BotPrefix']
-    bot_brand_color = data['BotBrandColor']
-    bot_version_number = data['BotVersionNumber']
+    bot_name = data['Bot']['Name']
+    bot_description = data['Bot']['Description']
+    bot_prefix = data['Bot']['Prefix']
+    bot_brand_color = data['Bot']['BrandColor']
+    bot_version_number = data['Bot']['VersionNumber']
 
-    credit_name = data['credits']['CreditName']
-    credit_profile = data['credits']['CreditProfile']
+    credit_name = data['Credit']['Name']
+    credit_profile = data['Credit']['Profile']
 
 
 # Function to create a help embed for commands
