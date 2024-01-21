@@ -48,7 +48,7 @@ class CustomCommands(commands.Cog):
         # self._last_member = None
 
     # Command to give random facts - why not?
-    @commands.slash_command(aliases=['randomfact', 'funfact', 'facts']commands.slash_command, description="Gives random facts about the game")
+    @commands.slash_command(aliases=['randomfact', 'funfact', 'facts'], description="Gives random facts about the game")
     async def fact(self, ctx):
         global fun_facts, fun_fact, previous_facts  # Needed to stop error
         if len(fun_facts) == 0:  # Resets the fun facts
@@ -78,7 +78,7 @@ class CustomCommands(commands.Cog):
                          icon_url=credit_profile)
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(aliases=['credit']commands.slash_command, description="Shows the game's credits")
+    @commands.slash_command(aliases=['credit'], description="Shows the game's credits")
     async def credits(self, ctx):
         embed = discord.Embed(title="TLE Credits", color=bot_brand_color, description=f"""Game Creator: **Milo Murphy**
     Lead Developer / Game Owner: **Ferb_Fletcher**
@@ -89,8 +89,7 @@ class CustomCommands(commands.Cog):
         await ctx.respond(embed=embed)
 
     # Command to link to the Floors List on the Luxury Elevator Wiki
-    @commands.slash_command(aliases=['floorslist']commands.slash_command,
-                            description="Returns a link to the Floors List")
+    @commands.slash_command(aliases=['floorslist'], description="Returns a link to the Floors List")
     async def floorlist(self, ctx):
         await ctx.respond(f"<{wiki_url}/wiki/Floors_List>")
 
