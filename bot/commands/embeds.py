@@ -12,7 +12,7 @@ with open(filepath, "r") as f:
     bot_description = data['Bot']['Description']
     bot_prefix = data['Bot']['Prefix']
     bot_brand_color = data['Bot']['BrandColor']
-    bot_version_number = data['Bot']['VersionNumber']
+    bot_version_number = data['Bot']['Version']
 
     credit_name = data['Credit']['Name']
     credit_profile = data['Credit']['Profile']
