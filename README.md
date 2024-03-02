@@ -89,7 +89,7 @@ Now you'll get your **bot token**. Remember the [Discord Developer Portal](https
 
 Click **"Reset Token"**, and if you have two-factor authentication, verify yourself with the code. You'll see the token to copy on the screen.
 > [!CAUTION]
-> ⚠️ This token should be kept **very safe** - treat it like your password and don't share it with anyone.
+> This token should be kept **very safe** - treat it like your password and don't share it with anyone.
 
 To authenticate the bot, create a `.env` file inside the `/discord-bot/` folder and put the bot token you just copied inside it like this:
 
