@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 import os
 from dotenv import load_dotenv
-from commands.embeds import error_embed, help_embed, info_embed
+from commands.embeds import error_embed, help_embed, info_embed, empty_embed
 import toml
 from os import path
 #
@@ -18,13 +18,13 @@ with open(file_path, "r") as f:
     bot_prefix = data['Bot']['Prefix']
     bot_brand_color = data['Bot']['BrandColor']
     bot_version_number = data['Bot']['Version']
+    guild_id_array = data['Bot']['EnabledGuilds']
 
     credit_name = data['Credit']['Name']
     credit_profile = data['Credit']['Profile']
 
     modules_enabled = data['Bot']['Modules']
     print("Config initialised")
-
 
 
 load_dotenv()  # load all the variables from the env file
@@ -40,7 +40,7 @@ async def on_ready():
 
 
 # Command to change the bot's settings. TODO: Expand settings to change from bot
-@bot.command(guild_ids=[1129161619272908892], description="Admin command to change bot settings")
+@bot.command(guild_ids=guild_id_array, description="Admin command to change bot settings")
 @commands.has_permissions(administrator=True)
 async def settings(ctx, *, setting=None):
     if setting is None:
@@ -51,13 +51,13 @@ async def settings(ctx, *, setting=None):
             # could do streaming here but w h y
             if command[1] == "playing" and len(command) == 3:
                 await bot.change_presence(activity=discord.Game(name=command[2]))
-                await ctx.respond(f"✅ Successfully set presence to 'Playing {command[2]}'", ephemeral=True)
+                await ctx.respond(embed=empty_embed(f"✅  Successfully set presence to 'Playing {command[2]}'"), ephemeral=True)
             elif command[1] == "listening":
                 await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=command[2]))
-                await ctx.respond(f"✅ Successfully set presence to 'Listening to {command[2]}'", ephemeral=True)
+                await ctx.respond(embed=empty_embed(f"✅  Successfully set presence to 'Listening to {command[2]}'"), ephemeral=True)
             elif command[1] == "watching":
                 await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=command[2]))
-                await ctx.respond(f"✅ Successfully set presence to 'Watching {command[2]}'", ephemeral=True)
+                await ctx.respond(embed=empty_embed(f"✅  Successfully set presence to 'Watching {command[2]}'"), ephemeral=True)
             else:
                 await ctx.respond(embed=error_embed("⚠️ Invalid syntax for the activity setting."), ephemeral=True)
 
@@ -85,13 +85,13 @@ async def on_command_error(ctx, error):
 
 
 # Command to display help information
-@bot.command(aliases=['commands'], description="Shows the help embed")
+@bot.command(aliases=['commands'], guild_ids=guild_id_array, description="Shows the help embed")
 async def help(ctx):
     await ctx.respond(embed=help_embed())
 
 
 # Command to display bot information
-@bot.command(aliases=['information'], guild_ids=[1129161619272908892], description="Shows info about the bot")
+@bot.command(aliases=['information'], guild_ids=guild_id_array, description="Shows info about the bot")
 async def info(ctx):
     await ctx.respond(embed=info_embed())
 

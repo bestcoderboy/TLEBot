@@ -42,6 +42,15 @@ def empty_help_embed(name, value):
     return embed
 
 
+# Function to create an empty help embed
+def empty_embed(description):
+    # Creating an embed object with title, color, and fields
+    embed = discord.Embed(color=bot_brand_color, description=description)
+    embed.set_footer(text=f"Created by {credit_name} • {bot_version_number}",
+                     icon_url=credit_profile)
+    return embed
+
+
 # Function to create an info embed for the bot
 def info_embed():
     # Creating an embed object with title, color, and description

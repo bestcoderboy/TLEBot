@@ -13,8 +13,12 @@ Bot.Description = "A bot created by **@BestSpyBoy**, designed specifically for t
 # Your brand color in a HEX color code, used in embeds. Add 0x so Python knows it's a HEX color.
 Bot.BrandColor  = 0xde8114
 
-# Changes every update. This shouldn't be edited unless you're forking your own version.
-Bot.Version     = "v1.3.1"
+# The guilds / servers your bot will be enabled in. Leave blank to enable commands globally.
+# To find the ID of a server, enable Developer Mode in settings and then right-click the server's icon.
+Bot.EnabledGuilds = [
+    1129161619272908892,  # TLEBotTesting
+    505807565146554398    # The Luxury Elevator
+]
 
 # A list of enabled modules. Find all available modules in the /commands/ folder.
 Bot.Modules     = [
@@ -22,10 +26,14 @@ Bot.Modules     = [
     "wiki"      # /bot/commands/wiki.py
 ]
 
+# Changes every update. This shouldn't be edited unless you're forking your own version.
+Bot.Version     = "v1.3.3"
+
 # You can change these if you really want, but I'd appreciate if they stay :)
 Credit.Name      = "BestSpyBoy"
 
 Credit.Profile   = "https://cdn.discordapp.com/avatars/725417693699899534/1fecf89ce5fefa638d2f273ed1d986aa.webp"
+
 #################################################################################################################################################################################
 # Module Settings
 

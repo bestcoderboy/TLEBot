@@ -19,6 +19,7 @@ with open(filepath, "r") as f:
     data = toml.load(f)
     bot_brand_color = data['Bot']['BrandColor']
     bot_version_number = data['Bot']['Version']
+    guild_id_array = data['Bot']['EnabledGuilds']
 
     credit_name = data['Credit']['Name']
     credit_profile = data['Credit']['Profile']
@@ -37,7 +38,7 @@ class WikiCommands(commands.Cog):
         required=True,
         default=''
     )
-    @commands.slash_command(aliases=['floor'], description="Returns information about a wiki page")
+    @commands.slash_command(aliases=['floor'], description="Returns information about a wiki page", guild_ids=guild_id_array)
     async def floor(self, ctx, *, floor=None):
         if floor is None:
             await ctx.respond(f"<{wiki_url}>")
@@ -105,7 +106,7 @@ class WikiCommands(commands.Cog):
                     await ctx.respond(embed=error_embed("The request to the server timed out :cry:"))
 
     # Command to generate a link for creating a new Wiki page
-    @commands.slash_command(description="Returns a link to create a wiki page")
+    @commands.slash_command(description="Returns a link to create a wiki page", guild_ids=guild_id_array)
     @option(
         "page",
         description="The page name to create",
@@ -121,7 +122,7 @@ class WikiCommands(commands.Cog):
             await ctx.respond(f"<{wiki_url}/w/index.php?title=" + wiki_link_parsed + "&veaction=edit>")
 
     # Command to search the Wiki and display results
-    @commands.slash_command(description="Searches the wiki for pages.")
+    @commands.slash_command(description="Searches the wiki for pages.", guild_ids=guild_id_array)
     @option(
         "query",
         description="The query to search for",
@@ -166,12 +167,12 @@ class WikiCommands(commands.Cog):
                 await ctx.respond(embed=error_embed("Something went wrong processing your search."))
 
     # Command to provide a link for users to sign up on the Wiki
-    @commands.slash_command(description="Returns a link to sign up for the wiki")
+    @commands.slash_command(description="Returns a link to sign up for the wiki", guild_ids=guild_id_array)
     async def signup(self, ctx):
         await ctx.respond(f"<{wiki_url}/wiki/Special:CreateAccount>")
 
     # Command to provide special links to the Wiki
-    @commands.slash_command(description="Returns a link to the wiki")
+    @commands.slash_command(description="Returns a link to the wiki", guild_ids=guild_id_array)
     async def wiki(self, ctx, *, arg=None):
         if arg is None:
             await ctx.respond(f"<{wiki_url}>")
@@ -183,7 +184,7 @@ class WikiCommands(commands.Cog):
             await ctx.respond(embed=error_embed("That isn't a"))  # was an accident, but it's funny so i'm keeping it
 
     # Command to provide a link to pages on the Wiki
-    @commands.slash_command(aliases=['link'], description="Provides a link to the wiki")
+    @commands.slash_command(aliases=['link'], description="Provides a link to the wiki", guild_ids=guild_id_array)
     async def wikilink(self, ctx, *, link=None):
         if link is None:
             await ctx.respond(embed=error_embed("`>wikilink` requires an argument."))

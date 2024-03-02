@@ -15,6 +15,7 @@ with open(filepath, "r") as f:
     data = toml.load(f)
     bot_brand_color = data['Bot']['BrandColor']
     bot_version_number = data['Bot']['Version']
+    guild_id_array = data['Bot']['EnabledGuilds']
 
     credit_name = data['Credit']['Name']
     credit_profile = data['Credit']['Profile']
@@ -34,12 +35,16 @@ original_fun_facts = [
     "### ################ ## # ###### #### ####### ####### ######### - ##### # #### ## #######. ### #####...",
     "The game has 48 badges - four of them are future badges and three badges can no longer be obtained.",
     "More fun facts are coming soon, promise!",
+    "If the elevator passes 49,103 floors, and you go up to the 2nd floor and enter the speedrunner room... Nothing new will appear there.",
+    "The chance of the Foot Lettuce guy appearing on the [Crossroads](https://wiki.theluxuryelevator.com/wiki/Crossroads) floor is less than the chance of an [Ultra Secret Floor](https://wiki.theluxuryelevator.com/wiki/Ultra_Secret_Floor) appearing.",
 
 ]
 fun_facts = original_fun_facts
+rand_lib.shuffle(fun_facts)
 
 fun_fact = ""
 previous_facts = []
+
 
 class CustomCommands(commands.Cog):
     def __init__(self, bot):
@@ -48,7 +53,7 @@ class CustomCommands(commands.Cog):
         # self._last_member = None
 
     # Command to give random facts - why not?
-    @commands.slash_command(aliases=['randomfact', 'funfact', 'facts'], description="Gives random facts about the game")
+    @commands.slash_command(aliases=['randomfact', 'funfact', 'facts'], description="Gives random facts about the game", guild_ids=guild_id_array)
     async def fact(self, ctx):
         global fun_facts, fun_fact, previous_facts  # Needed to stop error
         if len(fun_facts) == 0:  # Resets the fun facts
@@ -78,7 +83,7 @@ class CustomCommands(commands.Cog):
                          icon_url=credit_profile)
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(aliases=['credit'], description="Shows the game's credits")
+    @commands.slash_command(aliases=['credit'], description="Shows the game's credits", guild_ids=guild_id_array)
     async def credits(self, ctx):
         embed = discord.Embed(title="TLE Credits", color=bot_brand_color, description=f"""Game Creator: **Milo Murphy**
     Lead Developer / Game Owner: **Ferb_Fletcher**
@@ -89,7 +94,7 @@ class CustomCommands(commands.Cog):
         await ctx.respond(embed=embed)
 
     # Command to link to the Floors List on the Luxury Elevator Wiki
-    @commands.slash_command(aliases=['floorslist'], description="Returns a link to the Floors List")
+    @commands.slash_command(aliases=['floorslist'], description="Returns a link to the Floors List", guild_ids=guild_id_array)
     async def floorlist(self, ctx):
         await ctx.respond(f"<{wiki_url}/wiki/Floors_List>")
 

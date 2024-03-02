@@ -41,13 +41,19 @@ First, let's check if you have Python installed on your computer by opening your
 
 On Windows, this is called **PowerShell** or **Command Prompt** (they do the same thing), and on macOS it is called **Terminal**.
 
-Open the terminal, then run the command `python --version` in the terminal to check if you have Python installed.
+Open the terminal, then run this command in the terminal to check if you have Python installed.
+```shell
+python --version
+```
 
 If you have Python already, it should respond with something like `Python 3.12.1`.
 
 If it responds with a red error, or the number starts with 2 instead of 3, you'll need to [install Python](https://www.python.org/downloads/).
 
-Now let's check for Git, another tool we need to use during setup. Run `git --version`, and if it's not installed, [download it](https://www.git-scm.com/downloads).
+Now let's check for Git, another tool we need to use during setup. Run this command, and if it's not installed, [download it](https://www.git-scm.com/downloads).
+```shell
+git --version
+```
 
 Now you can proceed to the next step - setting up the bot.
 
@@ -55,9 +61,15 @@ Now you can proceed to the next step - setting up the bot.
 
 Let's get the code to run the bot ready. Create a new folder anywhere you want, then open your terminal again.
 
-In the terminal, navigate to the folder you created by running `cd <folder-path>` - for example, `cd "C:/Users/bests/Documents/MyGameBot"`.
+In the terminal, navigate to the folder you created by running the command below - for example, `cd "C:/Users/best/Documents/MyGameBot"`.
+```shell
+cd <your-folder-path>
+```
 
-We can now use Git to clone this repo to your local machine. Run `git clone https://github.com/bestcoderboy/TLEBot` to copy the files.
+We can now use Git to clone this repo to your local machine. Run this command to copy the files.
+```shell
+git clone https://github.com/bestcoderboy/TLEBot.git
+```
 
 Now that everything is ready, let's create a virtual environment for Python to use by running `python -m venv discord-bot` in your shell.
 
@@ -68,17 +80,25 @@ Once the virtual environment is created, run the activation script for your OS:
 
 After running the script, you will see the name of the environment like `(discord-bot)` next to the shell.
 
-Next, run `pip install -r requirements.txt` to install all the Python packages needed to run the bot.
+Next, run this command to install all the Python packages needed to run the bot (you may have to use `pip3` instead of `pip`).
+```shell
+pip install -r requirements.txt
+```
 
 Now you'll get your **bot token**. Remember the [Discord Developer Portal](https://discord.com/developers/applications)? Let's go back to your application's **Bot** tab again.
 
 Click **"Reset Token"**, and if you have two-factor authentication, verify yourself with the code. You'll see the token to copy on the screen.
-> ⚠️ **This token should be kept very safe - treat it like your password and don't share it with anyone.**
+> [!CAUTION]
+> ⚠️ This token should be kept **very safe** - treat it like your password and don't share it with anyone.
 
-To authenticate the bot, create a `.env` file inside the folder and put the bot token you just copied inside it like this:
+To authenticate the bot, create a `.env` file inside the `/discord-bot/` folder and put the bot token you just copied inside it like this:
 
 ```env
 DISCORD_TOKEN=ABCDEF123-your-token-here-456WXYZ
 ```
 
-Finally, run `python main.py` to run the script and start the bot.
+Finally, run this command to run the script and start the bot.
+
+```shell
+python main.py
+```
