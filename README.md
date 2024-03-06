@@ -15,7 +15,8 @@
 ## 💻 Get started with the bot
 This guide is for how to set up and run the bot on a server / computer. 
 
-**If you don't want to run it on your own computer**, we recommend using a [DigitalOcean droplet](https://m.do.co/c/084de397ebb4) (get $200 in credit with this affiliate link).
+> [!TIP]
+> **If you don't want to run it on your own computer**, we recommend using a [DigitalOcean droplet](https://m.do.co/c/084de397ebb4) (get $200 in credit with this affiliate link).
 
 If you're a Python and Git user already, and have set up your Discord bot, you can skip to [this section](#-running-the-bot) to start running the bot. 
 
